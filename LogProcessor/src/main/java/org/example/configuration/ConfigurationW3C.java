@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class ConfigurationW3C implements IConfiguration {
-    private final Map<String, Integer> mapFieldToIndex = new HashMap<>();
+    protected final Map<String, Integer> mapFieldToIndex = new HashMap<>();
 
     public void BeforeProcessingInit( List<Path> pathList ) {
         String fields = "";

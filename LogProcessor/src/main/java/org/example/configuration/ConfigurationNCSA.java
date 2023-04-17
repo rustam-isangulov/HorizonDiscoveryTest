@@ -26,8 +26,10 @@ public class ConfigurationNCSA implements IConfiguration {
             "bytes_sent", 8
     );
 
-    SimpleDateFormat dateNCSA = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);
-    SimpleDateFormat dateOutput = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final SimpleDateFormat dateNCSA =
+            new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z", Locale.ENGLISH);
+    private final SimpleDateFormat dateOutput =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public void BeforeProcessingInit( List<Path> pathList ) {
         // do nothing

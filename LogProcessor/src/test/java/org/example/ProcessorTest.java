@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.configuration.Configurations.ConfigurationType;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -20,6 +22,27 @@ public class ProcessorTest {
     @BeforeEach
     void init() {
         processor = new Processor();
+    }
+
+    @Test
+    void testProcessW3C404ConsoleOutput() {
+        var expectedOutput = List.of(
+                "/images/cartoon.gif 4 2002-05-04 17:42:25",
+                "/images/text.txt 2 2002-05-03 17:42:25"
+        );
+
+        List<String> results = new ArrayList<>();
+
+        processor.process(
+                getConfiguration(ConfigurationType.W3C404),
+                List.of(
+                        Path.of("../test_logs/W3CLog.txt"),
+                        Path.of("../test_logs/W3CLog1.txt")
+                ),
+                results::add
+        );
+
+        Assertions.assertEquals(expectedOutput, results);
     }
 
     @Test

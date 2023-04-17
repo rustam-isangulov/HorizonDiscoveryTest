@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 public class Configurations {
     public enum ConfigurationType {
         W3C(ConfigurationW3C::new),
+        W3C404(ConfigurationW3C404::new),
         NCSA(ConfigurationNCSA::new);
 
         private final Supplier<IConfiguration> instantiator;
