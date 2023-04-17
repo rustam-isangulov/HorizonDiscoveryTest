@@ -1,7 +1,6 @@
 package org.example;
 
-import org.example.configuration.ConfigurationNCSA;
-import org.example.configuration.ConfigurationW3C;
+import org.example.configuration.Configurations.ConfigurationType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static org.example.configuration.Configurations.*;
 
 public class ProcessorTest {
 
@@ -22,9 +23,20 @@ public class ProcessorTest {
     }
 
     @Test
-    void testProcessW3C() {
-        try (var writer = new BufferedWriter(new FileWriter("outputW3C.txt"))) {
+    void testProcessW3CConsoleOutput() {
+        processor.process(
+                getConfiguration(ConfigurationType.W3C),
+                List.of(
+                        Path.of("../test_logs/W3CLog.txt"),
+                        Path.of("../test_logs/W3CLog1.txt")
+                ),
+                System.out::println
+        );
+    }
 
+    @Test
+    void testProcessW3CFileOutput() {
+        try (var writer = new BufferedWriter(new FileWriter("../test_logs/outputW3C.txt"))) {
             Consumer<String> appender = l -> {
                 try {
                     writer.write(l);
@@ -35,7 +47,7 @@ public class ProcessorTest {
             };
 
             processor.process(
-                    new ConfigurationW3C(),
+                    getConfiguration(ConfigurationType.W3C),
                     List.of(
                             Path.of("../test_logs/W3CLog.txt"),
                             Path.of("../test_logs/W3CLog1.txt")
@@ -49,9 +61,20 @@ public class ProcessorTest {
     }
 
     @Test
-    void testProcessNSCA() {
-        try (var writer = new BufferedWriter(new FileWriter("outputNSCA.txt"))) {
+    void testProcessNSCAConsoleOutput() {
+        processor.process(
+                getConfiguration(ConfigurationType.NCSA),
+                List.of(
+                        Path.of("../test_logs/NCSALog.txt"),
+                        Path.of("../test_logs/NCSALog1.txt")
+                ),
+                System.out::println
+        );
+    }
 
+    @Test
+    void testProcessNSCAFileOutput() {
+        try (var writer = new BufferedWriter(new FileWriter("../test_logs/outputNSCA.txt"))) {
             Consumer<String> appender = l -> {
                 try {
                     writer.write(l);
@@ -62,7 +85,7 @@ public class ProcessorTest {
             };
 
             processor.process(
-                    new ConfigurationNCSA(),
+                    getConfiguration(ConfigurationType.NCSA),
                     List.of(
                             Path.of("../test_logs/NCSALog.txt"),
                             Path.of("../test_logs/NCSALog1.txt")
