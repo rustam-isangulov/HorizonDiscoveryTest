@@ -15,4 +15,4 @@
 172.22.255.251 - Microsoft\JohnDoe [04/May/2002:17:42:22 +0100] "GET /images/picture.jpg HTTP/1.0" 200 3256
 172.22.255.251 - Microsoft\JohnDoe [04/May/2002:17:42:23 +0100] "GET /images/cartoon.gif HTTP/1.0" 200 3256
 172.22.255.251 - Microsoft\JohnDoe [04/May/2002:17:42:24 +0100] "GET /images/cartoon.gif HTTP/1.0" 200 3256
-172.22.255.251 - Microsoft\JohnDoe [04/May/2002:17:42:25 +0100] "GET /images/cartoon.gif HTTP/1.0" 400 3256
+172.22.255.251 - Microsoft\JohnDoe [04/May/2002:17:42:25 +0100] "GET /images/cartoon.gif HTTP/1.0" 404 3256
