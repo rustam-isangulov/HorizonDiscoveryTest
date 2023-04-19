@@ -65,8 +65,8 @@ java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALo
 - Reading data from files is the primary input mechanism
 - Writing data should support at least console and files
 - Supported formats should at least include W3C (dynamic columns) and NCSA (fixed columns)
-- W3C files format reference: [source] [https://www.w3.org/TR/WD-logfile]
-- NCSA files format reference: [source] [https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging]
+- W3C files format reference: [source] (https://www.w3.org/TR/WD-logfile)
+- NCSA files format reference: [source] (https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging)
 - No particular aggregation format was chosen, a placeholder `formatter` is the default `List<String>::toString()` method call
 
 
