@@ -12,7 +12,6 @@ Java 11
 macos:
 ```shell
 java -version
->>>>>>> 8b63aa5 (Update README.md)
 openjdk version "11.0.12" 2021-07-20
 OpenJDK Runtime Environment Homebrew (build 11.0.12+0)
 OpenJDK 64-Bit Server VM Homebrew (build 11.0.12+0, mixed mode)
