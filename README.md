@@ -1,2 +1,1 @@
-# HorizonDiscoveryTest
-Horizon Discovery – Technical Test
+# Horizon Discovery – Technical Test
