@@ -4,6 +4,15 @@
 
 > *Write an application (console is fine) that outputs a ranked list of URLs along with how many "hits" each has got. Do use artistic license but document any assumptions you make.*
 
-## Process example logs with precompiled jars
+## Run the application on example logs using precompiled jars
 
 ### System requirements
+Java 11
+#### tested environments
+macos:
+```shell
+java -version 
+openjdk version "11.0.12" 2021-07-20
+OpenJDK Runtime Environment Homebrew (build 11.0.12+0)
+OpenJDK 64-Bit Server VM Homebrew (build 11.0.12+0, mixed mode)
+```
