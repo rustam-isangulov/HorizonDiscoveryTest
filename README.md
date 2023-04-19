@@ -27,7 +27,7 @@ git clone https://github.com/rustam-isangulov/HorizonDiscoveryTest.git
 ```shell
 cd HorizonDiscoveryTest
 ```
-3. run the application to output aggragated *W3C* log data to console
+3. run the application to output aggregated *W3C* log data to console
 
 ```shell
 java -jar bin/LogProcessor.jar -p W3C -f test_logs/W3CLog.txt test_logs/W3CLog1.txt
