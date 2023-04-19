@@ -27,7 +27,7 @@ git clone https://github.com/rustam-isangulov/HorizonDiscoveryTest.git
 ```shell
 cd HorizonDiscoveryTest
 ```
-3. run the application to output aggragated log data to console
+3. run the application to output aggragated *W3C* log data to console
 
 ```shell
 java -jar bin/LogProcessor.jar -p W3C -f test_logs/W3CLog.txt test_logs/W3CLog1.txt
@@ -43,3 +43,21 @@ java -jar bin/LogProcessor.jar -p W3C -f test_logs/W3CLog.txt test_logs/W3CLog1.
 ```
 </p>
 </details>
+
+4. run the application to output aggregated *NCSA* log data to console
+
+```shell
+java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALog1.txt
+```
+
+<details><summary>expected output</summary>
+<p>
+
+```shell
+[18, /images/picture.jpg, 2002-05-04 17:42:22, 3256]
+[12, /images/cartoon.gif, 2002-05-04 17:42:25, 3256]
+[6, /images/text.txt, 2002-05-03 17:42:25, 3256]
+```
+</p>
+</details>
+
