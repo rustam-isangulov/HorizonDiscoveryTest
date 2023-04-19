@@ -16,3 +16,20 @@ openjdk version "11.0.12" 2021-07-20
 OpenJDK Runtime Environment Homebrew (build 11.0.12+0)
 OpenJDK 64-Bit Server VM Homebrew (build 11.0.12+0, mixed mode)
 ```
+## Steps
+1. clone this repository
+
+```shell
+git clone https://github.com/rustam-isangulov/HorizonDiscoveryTest.git
+```
+2. change directory to `HorizonDiscoveryTest`
+
+```shell
+cd HorizonDiscoveryTest
+```
+3. run the application to output aggragated log data to console
+
+```shell
+java -jar bin/LogProcessor.jar -p W3C -f test_logs/W3CLog.txt test_logs/W3CLog1.txt
+```
+
