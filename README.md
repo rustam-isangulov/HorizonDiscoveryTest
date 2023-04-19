@@ -33,3 +33,13 @@ cd HorizonDiscoveryTest
 java -jar bin/LogProcessor.jar -p W3C -f test_logs/W3CLog.txt test_logs/W3CLog1.txt
 ```
 
+<details><summary>expected output</summary>
+<p>
+
+```shell
+[18, /images/picture.jpg, 2002-05-04, 17:42:22]
+[12, /images/cartoon.gif, 2002-05-04, 17:42:25]
+[6, /images/text.txt, 2002-05-03, 17:42:25]
+```
+</p>
+</details>
