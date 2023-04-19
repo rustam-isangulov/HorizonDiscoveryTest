@@ -3,7 +3,6 @@ package org.example.configuration;
 import java.util.List;
 
 public class ClassifierImpl implements Classifier {
-    private final int BAD_INDEX = -1;
     private final int aggregatorIndex;
 
     public ClassifierImpl( Header header, String fieldName ) {

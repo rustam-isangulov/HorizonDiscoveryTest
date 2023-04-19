@@ -80,8 +80,8 @@ public class ProcessorImp implements Processor {
 
             processor.stringFilter = header.getEntryStringFilter();
             processor.stringParser = parser;
-            processor.entryFilter = Filters.getW3CFilter(this.filterRequest, header);
-            processor.entryClassifier = Classifiers.getW3CClassifier(header, this.classifier);
+            processor.entryFilter = Filters.getFilter(this.filterRequest, header);
+            processor.entryClassifier = Classifiers.getClassifier(header, this.classifier);
             processor.entryAggregator = EntryAggregators.getW3CEntryAggregator(
                     getW3CFieldAggregators(header, this.fieldsToAggregateRequest)
             );
