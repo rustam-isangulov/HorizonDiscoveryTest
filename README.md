@@ -11,7 +11,8 @@ Java 11
 #### tested environments
 macos:
 ```shell
-java -version 
+java -version
+>>>>>>> 8b63aa5 (Update README.md)
 openjdk version "11.0.12" 2021-07-20
 OpenJDK Runtime Environment Homebrew (build 11.0.12+0)
 OpenJDK 64-Bit Server VM Homebrew (build 11.0.12+0, mixed mode)
@@ -68,5 +69,3 @@ java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALo
 - W3C files format reference: [source] (https://www.w3.org/TR/WD-logfile)
 - NCSA files format reference: [source] (https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging)
 - No particular aggregation format was chosen, a placeholder `formatter` is the default `List<String>::toString()` method call
-
-
