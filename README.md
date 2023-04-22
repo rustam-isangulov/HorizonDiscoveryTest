@@ -68,3 +68,7 @@ java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALo
 - W3C files format reference: [source] (https://www.w3.org/TR/WD-logfile)
 - NCSA files format reference: [source] (https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging)
 - No particular aggregation format was chosen, a placeholder `formatter` is the default `List<String>::toString()` method call
+
+## Partial UML diagrams
+
+![alt text](./HDTLPTop.jpeg)
