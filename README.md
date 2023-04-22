@@ -71,4 +71,5 @@ java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALo
 
 ## Partial UML diagrams
 
-![alt text](./HDTLPTop.jpeg)
+![Process](./HDTLPTop.jpeg)
+![Configuration](./HDTLPConfiguration.jpeg)
