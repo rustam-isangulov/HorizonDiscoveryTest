@@ -1,4 +1,4 @@
-*The version published on the due date (17 July 2022) has been tagged (v0.1-due-date)[https://github.com/rustam-isangulov/HorizonDiscoveryTest/tree/v0.1.2-due-date].*
+*The version published on the due date (17 July 2022) has been tagged [v0.1-due-date](https://github.com/rustam-isangulov/HorizonDiscoveryTest/tree/v0.1.2-due-date).*
 
 # Horizon Discovery – Technical Test
 
