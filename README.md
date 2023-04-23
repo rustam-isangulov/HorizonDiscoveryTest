@@ -1,3 +1,5 @@
+*The version published on the due date (17 July 2022) has been tagged (v0.1-due-date)[https://github.com/rustam-isangulov/HorizonDiscoveryTest/tree/v0.1.2-due-date].*
+
 # Horizon Discovery – Technical Test
 
 ## Objective
@@ -65,8 +67,8 @@ java -jar bin/LogProcessor.jar -p NCSA -f test_logs/NCSALog.txt test_logs/NCSALo
 - Reading data from files is the primary input mechanism
 - Writing data should support at least console and files
 - Supported formats should at least include W3C (dynamic columns) and NCSA (fixed columns)
-- W3C files format reference: [source] (https://www.w3.org/TR/WD-logfile)
-- NCSA files format reference: [source] (https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging)
+- W3C files format reference: [source](https://www.w3.org/TR/WD-logfile)
+- NCSA files format reference: [source](https://learn.microsoft.com/en-us/windows/win32/http/ncsa-logging)
 - No particular aggregation format was chosen, a placeholder `formatter` is the default `List<String>::toString()` method call
 
 ## Partial UML diagrams
