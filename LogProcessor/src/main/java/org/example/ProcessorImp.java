@@ -55,7 +55,7 @@ public class ProcessorImp implements Processor {
             return this;
         }
 
-        public ProcessorImp build() {
+        public Processor build() {
             var processor = new ProcessorImp();
 
             processor.typeInfo = typeInfo;
