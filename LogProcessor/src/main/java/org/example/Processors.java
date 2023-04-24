@@ -1,9 +1,6 @@
 package org.example;
 
-import org.example.configuration.FieldAggregator;
-import org.example.configuration.FieldAggregators;
-import org.example.configuration.Headers;
-import org.example.configuration.Parsers;
+import org.example.configuration.*;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -16,23 +13,42 @@ public class Processors {
         }
 
         return ProcessorImp.ProcessorBuilder.aProcessor()
-                .withHeader(Headers.getW3CHeader(pathList.get(0)))
-                .withParser(Parsers.getW3CParser())
-                .withFilters(
-                        Map.of(
-                                "sc-status", ".+",
-                                "date", ".+"
+                .withTypeInfo(TypeInfoProvider.getW3CTypeInfo(pathList.get(0)))
+                .thenFilter(
+                        FilterImpl.of(
+                                Map.of(
+                                        "sc-status", ".+",
+                                        "date", ".+"
+                                )
                         )
                 )
-                .withClassifier("cs-uri-stem")
-                .withFieldsToAggregate(
-                        List.of(
-                                new FieldAggregators.FieldRequest("cs-uri-stem", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("date", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("time", FieldAggregator.AggregateFun.MAX)
+                .thenAggregate(
+                        AggregateImpl.anAggregator()
+                                .withClassifier("cs-uri-stem")
+                                .withCounterAs("my_counter")
+                                .withRule(
+                                        "cs-uri-stem",
+                                        "cs-uri-stem",
+                                        ( s1, s2 ) -> s2
+                                )
+                                .withRule(
+                                        "date",
+                                        "date",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .withRule(
+                                        "time",
+                                        "time",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .build()
+                )
+                .thenSort(
+                        SorterImpl.of(
+                                "my_counter",
+                                ( s1, s2 ) -> Integer.parseInt(s2) - Integer.parseInt(s1)
                         )
                 )
-                .withSummarySorter("counter")
                 .withAppender(System.out::println)
                 .build();
     }
@@ -43,69 +59,126 @@ public class Processors {
         }
 
         return ProcessorImp.ProcessorBuilder.aProcessor()
-                .withHeader(Headers.getW3CHeader(pathList.get(0)))
-                .withParser(Parsers.getW3CParser())
-                .withFilters(
-                        Map.of(
-                                "sc-status", "404",
-                                "date", ".+"
+                .withTypeInfo(TypeInfoProvider.getW3CTypeInfo(pathList.get(0)))
+                .thenFilter(
+                        FilterImpl.of(
+                                Map.of(
+                                        "sc-status", "404",
+                                        "date", ".+"
+                                )
                         )
                 )
-                .withClassifier("cs-uri-stem")
-                .withFieldsToAggregate(
-                        List.of(
-                                new FieldAggregators.FieldRequest("cs-uri-stem", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("date", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("time", FieldAggregator.AggregateFun.MAX)
+                .thenAggregate(
+                        AggregateImpl.anAggregator()
+                                .withClassifier("cs-uri-stem")
+                                .withCounterAs("my_counter")
+                                .withRule(
+                                        "cs-uri-stem",
+                                        "cs-uri-stem",
+                                        ( s1, s2 ) -> s2
+                                )
+                                .withRule(
+                                        "date",
+                                        "date",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .withRule(
+                                        "time",
+                                        "time",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .build()
+                )
+                .thenSort(
+                        SorterImpl.of(
+                                "my_counter",
+                                ( s1, s2 ) -> Integer.parseInt(s2) - Integer.parseInt(s1)
                         )
                 )
-                .withSummarySorter("counter")
                 .withAppender(System.out::println)
                 .build();
     }
 
     public static Processor getNCSAProcessor() {
         return ProcessorImp.ProcessorBuilder.aProcessor()
-                .withHeader(Headers.getNCSAHeader())
-                .withParser(Parsers.getNCSAParser())
-                .withFilters(
-                        Map.of(
-                                "status_code", ".+",
-                                "date_time", ".+"
+                .withTypeInfo(TypeInfoProvider.getNCSATypeInfo())
+                .thenFilter(
+                        FilterImpl.of(
+                                Map.of(
+                                        "status_code", ".+",
+                                        "date_time", ".+"
+                                )
                         )
                 )
-                .withClassifier("uri")
-                .withFieldsToAggregate(
-                        List.of(
-                                new FieldAggregators.FieldRequest("uri", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("date_time", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("bytes_sent", FieldAggregator.AggregateFun.MAX)
+                .thenAggregate(
+                        AggregateImpl.anAggregator()
+                                .withClassifier("uri")
+                                .withCounterAs("my_counter")
+                                .withRule(
+                                        "uri",
+                                        "uri",
+                                        ( s1, s2 ) -> s2
+                                )
+                                .withRule(
+                                        "date_time",
+                                        "date_time",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .withRule(
+                                        "bytes_sent",
+                                        "bytes_sent",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .build()
+                )
+                .thenSort(
+                        SorterImpl.of(
+                                "my_counter",
+                                ( s1, s2 ) -> Integer.parseInt(s2) - Integer.parseInt(s1)
                         )
                 )
-                .withSummarySorter("counter")
                 .withAppender(System.out::println)
                 .build();
     }
 
     public static Processor getNCSAProcessor404() {
         return ProcessorImp.ProcessorBuilder.aProcessor()
-                .withHeader(Headers.getNCSAHeader())
-                .withParser(Parsers.getNCSAParser())
-                .withFilters(
-                        Map.of(
-                                "status_code", "404",
-                                "date_time", ".+"
+                .withTypeInfo(TypeInfoProvider.getNCSATypeInfo())
+                .thenFilter(
+                        FilterImpl.of(
+                                Map.of(
+                                        "status_code", "404",
+                                        "date_time", ".+"
+                                )
                         )
                 )
-                .withClassifier("uri")
-                .withFieldsToAggregate(
-                        List.of(
-                                new FieldAggregators.FieldRequest("uri", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("date_time", FieldAggregator.AggregateFun.MAX),
-                                new FieldAggregators.FieldRequest("bytes_sent", FieldAggregator.AggregateFun.MAX)
+                .thenAggregate(
+                        AggregateImpl.anAggregator()
+                                .withClassifier("uri")
+                                .withCounterAs("my_counter")
+                                .withRule(
+                                        "uri",
+                                        "uri",
+                                        ( s1, s2 ) -> s2
+                                )
+                                .withRule(
+                                        "date_time",
+                                        "date_time",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .withRule(
+                                        "bytes_sent",
+                                        "bytes_sent",
+                                        ( s1, s2 ) -> s1.compareTo(s2) > 0 ? s1 : s2
+                                )
+                                .build()
+                )
+                .thenSort(
+                        SorterImpl.of(
+                                "my_counter",
+                                ( s1, s2 ) -> Integer.parseInt(s2) - Integer.parseInt(s1)
                         )
                 )
-                .withSummarySorter("counter")
                 .withAppender(System.out::println)
                 .build();
     }

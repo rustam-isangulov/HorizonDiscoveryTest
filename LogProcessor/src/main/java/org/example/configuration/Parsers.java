@@ -13,15 +13,12 @@ import java.util.stream.IntStream;
 
 public class Parsers {
     public static Function<String, List<String>> getW3CParser() {
-        return entry -> {
-            final String regex = "(\\S+)";
-            final Pattern pattern = Pattern.compile(regex);
-            final Matcher matcher = pattern.matcher(entry);
+        final String regex = "(\\S+)";
+        final Pattern pattern = Pattern.compile(regex);
 
-            return matcher.results()
-                    .map(MatchResult::group)
-                    .collect(Collectors.toList());
-        };
+        return entry -> pattern.matcher(entry).results()
+                .map(MatchResult::group)
+                .collect(Collectors.toList());
     }
 
     public static Function<String, List<String>> getNCSAParser() {
@@ -30,9 +27,10 @@ public class Parsers {
         final SimpleDateFormat dateOutput =
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        final String regex = "(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \\\"(\\S+) (\\S+)\\s*(\\S+)?\\s*\\\" (\\d{3}) (\\S+)";
+        final Pattern pattern = Pattern.compile(regex);
+
         return entry -> {
-            final String regex = "(\\S+) (\\S+) (\\S+) \\[([\\w:/]+\\s[+\\-]\\d{4})\\] \\\"(\\S+) (\\S+)\\s*(\\S+)?\\s*\\\" (\\d{3}) (\\S+)";
-            final Pattern pattern = Pattern.compile(regex);
             final Matcher matcher = pattern.matcher(entry);
 
             if (matcher.find()) {

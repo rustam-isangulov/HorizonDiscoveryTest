@@ -1,5 +1,6 @@
 package org.example;
 
+
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -8,7 +9,7 @@ import java.util.List;
 public class ProcessorImpTest {
 
     @Test
-    void testProcessingV2ForW3C() {
+    public void testProcessingV2ForW3C() {
         // EXPECTED!!!
 
         var files = List.of(

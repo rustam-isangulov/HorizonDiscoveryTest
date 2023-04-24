@@ -5,32 +5,22 @@ import org.example.configuration.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static org.example.configuration.FieldAggregators.*;
-
 public class ProcessorImp implements Processor {
-    private Predicate<String> stringFilter;
-    private Function<String, List<String>> stringParser;
-    private Predicate<List<String>> entryFilter;
-    private Function<List<String>, String> entryClassifier;
-    private Function<List<List<String>>, List<String>> entryAggregator;
-    private Function<List<List<String>>, List<String>> summaryAggregator;
-    private Comparator<List<String>> summarySorter;
-    private Function<List<String>, String> formatter = List::toString;
+    private TypeInfo typeInfo;
+    Deque<Transform> transforms = new ArrayDeque<>();
     private Consumer<String> appender;
+    private final Function<List<String>, String> formatter = List::toString;
 
     public final static class ProcessorBuilder {
-        private Header header;
-        private Function<String, List<String>> parser;
-        private Map<String, String> filterRequest;
-        private String classifier;
-        private List<FieldRequest> fieldsToAggregateRequest;
-        private String summarySorterField;
+        private TypeInfo typeInfo;
+        Deque<Transform> transforms = new ArrayDeque<>();
         private Consumer<String> appender;
 
         private ProcessorBuilder() {
@@ -40,33 +30,8 @@ public class ProcessorImp implements Processor {
             return new ProcessorBuilder();
         }
 
-        public ProcessorBuilder withHeader( Header header ) {
-            this.header = header;
-            return this;
-        }
-
-        public ProcessorBuilder withParser( Function<String, List<String>> parser ) {
-            this.parser = parser;
-            return this;
-        }
-
-        public ProcessorBuilder withFilters( Map<String, String> filterRequest ) {
-            this.filterRequest = filterRequest;
-            return this;
-        }
-
-        public ProcessorBuilder withClassifier( String classifier ) {
-            this.classifier = classifier;
-            return this;
-        }
-
-        public ProcessorBuilder withFieldsToAggregate( List<FieldRequest> fieldsToAggregateRequest ) {
-            this.fieldsToAggregateRequest = fieldsToAggregateRequest;
-            return this;
-        }
-
-        public ProcessorBuilder withSummarySorter( String summarySorterField ) {
-            this.summarySorterField = summarySorterField;
+        public ProcessorBuilder withTypeInfo( TypeInfo info ) {
+            this.typeInfo = info;
             return this;
         }
 
@@ -75,67 +40,82 @@ public class ProcessorImp implements Processor {
             return this;
         }
 
+        public ProcessorBuilder thenFilter( Filter filterRequest ) {
+            this.transforms.add(filterRequest);
+            return this;
+        }
+
+        public ProcessorBuilder thenAggregate( Aggregate aggregate ) {
+            this.transforms.add(aggregate);
+            return this;
+        }
+
+        public ProcessorBuilder thenSort( Sorter sorter ) {
+            this.transforms.add(sorter);
+            return this;
+        }
+
         public ProcessorImp build() {
             var processor = new ProcessorImp();
 
-            processor.stringFilter = header.getEntryStringFilter();
-            processor.stringParser = parser;
-            processor.entryFilter = Filters.getFilter(this.filterRequest, header);
-            processor.entryClassifier = Classifiers.getClassifier(header, this.classifier);
-            processor.entryAggregator = EntryAggregators.getW3CEntryAggregator(
-                    getW3CFieldAggregators(header, this.fieldsToAggregateRequest)
-            );
-
-            var summaryFieldAggregators = getW3CSummaryFieldAggregators(
-                    getW3CFieldAggregators(header, this.fieldsToAggregateRequest)
-            );
-
-            processor.summaryAggregator = SummaryAggregators.getW3CSummaryAggregator(
-                    summaryFieldAggregators
-            );
-            processor.summarySorter = SummarySorters.getW3CSummarySorter(
-                    summaryFieldAggregators,
-                    this.summarySorterField
-            );
-            processor.appender = this.appender;
+            processor.typeInfo = typeInfo;
+            processor.transforms = transforms;
+            processor.appender = appender;
 
             return processor;
         }
     }
 
     public void process( List<Path> pathList ) {
-        pathList.stream()
+        load( transform( extract( pathList )));
+    }
+
+    private List<List<String>> extract( List<Path> pathList ) {
+        return pathList.stream()
                 .flatMap(path -> {
                             try (var lines = Files.lines(path)) {
                                 return lines
-                                        .filter(stringFilter)
-                                        .map(stringParser)
-                                        .filter(entryFilter)
-                                        .collect(Collectors.groupingBy(
-                                                        entryClassifier,
-                                                        Collectors.toList()
-                                                )
-                                        )
-                                        .entrySet().stream()
-                                        .map(e -> new AbstractMap.SimpleEntry<>(
-                                                        e.getKey(),
-                                                        entryAggregator.apply(e.getValue())
-                                                )
-                                        );
+                                        .filter(typeInfo.getEntryStringFilter())
+                                        .map(typeInfo.getParser())
+                                        .collect(Collectors.toList())
+                                        .stream();
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
                         }
                 )
-                .collect(Collectors.groupingBy(
-                                Map.Entry::getKey,
-                                Collectors.mapping(Map.Entry::getValue, Collectors.toList())
-                        )
-                )
-                .entrySet().stream()
-                .map(e -> summaryAggregator.apply(e.getValue()))
-                .sorted(summarySorter.reversed())
+                .collect(Collectors.toList());
+    }
+
+    private LogEntries transform( List<List<String>> sourceEntries ) {
+        return applyTransforms(
+                new LogEntries(
+                        typeInfo.getFields().stream()
+                                .map(Field::getName)
+                                .collect(Collectors.toList())
+                        , sourceEntries
+                ),
+                transforms
+        );
+    }
+
+    private void load( LogEntries processedEntries ) {
+        processedEntries.getEntries()
+                .stream()
                 .map(formatter)
                 .forEach(appender);
+    }
+
+    private LogEntries applyTransforms(
+            LogEntries entries,
+            Deque<Transform> transforms
+    ) {
+        Transform transform;
+
+        if ((transform = transforms.pollLast()) != null) {
+            return transform.apply(applyTransforms(entries, transforms));
+        }
+
+        return entries;
     }
 }
