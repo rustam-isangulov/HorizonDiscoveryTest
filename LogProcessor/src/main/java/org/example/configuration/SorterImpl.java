@@ -12,7 +12,7 @@ public class SorterImpl implements Sorter {
         this.comparator = comparator;
     }
 
-    public static SorterImpl of( String fieldName, Comparator<String> comparator ) {
+    public static Sorter of( String fieldName, Comparator<String> comparator ) {
         return new SorterImpl( fieldName, comparator );
     }
 
